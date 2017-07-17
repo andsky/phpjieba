@@ -105,7 +105,19 @@ PHP_MINIT_FUNCTION(jieba)
 	zend_class_entry jieba_entry; 
 	INIT_CLASS_ENTRY(jieba_entry, "jieba", jieba_functions);
     //jieba_ce = zend_register_internal_class_ex(&jieba_entry,NULL,NULL TSRMLS_CC);
-	jieba_ce = zend_register_internal_class(&jieba_entry TSRMLS_CC);  
+	jieba_ce = zend_register_internal_class(&jieba_entry TSRMLS_CC); 
+	
+	const char* DICT_PATH = JIEBA_G(dict_path);
+	const char* HMM_PATH = JIEBA_G(hmm_path);
+	const char* USER_DICT = JIEBA_G(user_path);
+	const char* IDF_PATH = JIEBA_G(idf_path);
+	const char* STOP_WORD_PATH = JIEBA_G(stop_words_path);
+	if (access(DICT_PATH, R_OK|F_OK) != 0 || access(HMM_PATH, R_OK|F_OK) != 0 || access(USER_DICT, R_OK|F_OK) != 0 || access(IDF_PATH, R_OK|F_OK) != 0 || access(STOP_WORD_PATH, R_OK|F_OK) != 0) {
+		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Failed to load the dict file");
+		return FAILURE;
+	}
+	JIEBA_G(jieba_obj) = NewJieba(DICT_PATH, HMM_PATH, USER_DICT, IDF_PATH, STOP_WORD_PATH);
+
 	return SUCCESS;
 }
 /* }}} */
@@ -115,6 +127,8 @@ PHP_MINIT_FUNCTION(jieba)
 PHP_MSHUTDOWN_FUNCTION(jieba)
 {
 	UNREGISTER_INI_ENTRIES();
+	 FreeJieba(JIEBA_G(jieba_obj));
+	//efree(JIEBA_G(jieba_obj));
 	return SUCCESS;
 }
 /* }}} */
@@ -154,21 +168,9 @@ PHP_MINFO_FUNCTION(jieba)
 /* }}} */
 
 PHP_METHOD(jieba, __construct) {	
-	const char* DICT_PATH = JIEBA_G(dict_path);
-	const char* HMM_PATH = JIEBA_G(hmm_path);
-	const char* USER_DICT = JIEBA_G(user_path);
-	const char* IDF_PATH = JIEBA_G(idf_path);
-	const char* STOP_WORD_PATH = JIEBA_G(stop_words_path);
-	if (access(DICT_PATH, R_OK|F_OK) != 0 || access(HMM_PATH, R_OK|F_OK) != 0 || access(USER_DICT, R_OK|F_OK) != 0 || access(IDF_PATH, R_OK|F_OK) != 0 || access(STOP_WORD_PATH, R_OK|F_OK) != 0) {
-		php_error_docref(NULL TSRMLS_CC, E_WARNING, "Failed to load the dict file");
-		return ;
-	}
-	JIEBA_G(jieba_obj) = NewJieba(DICT_PATH, HMM_PATH, USER_DICT, IDF_PATH, STOP_WORD_PATH);
 }
 
 PHP_METHOD(jieba, __destruct) {
- FreeJieba(JIEBA_G(jieba_obj));
- efree(JIEBA_G(jieba_obj));
 }
 
 PHP_METHOD(jieba, cut) {
