@@ -21,7 +21,7 @@ make
 make install
 
 cp -R include/cjieba/dict /etc/jieba
-
+```
 ## 用法
 
 $j=new jieba();
