@@ -1,0 +1,13 @@
+// $Id$
+// vim:ft=javascript
+
+// If your extension references something external, use ARG_WITH
+// ARG_WITH("jieba", "for jieba support", "no");
+
+// Otherwise, use ARG_ENABLE
+// ARG_ENABLE("jieba", "enable jieba support", "no");
+
+if (PHP_JIEBA != "no") {
+	EXTENSION("jieba", "jieba.c");
+}
+
