@@ -23,7 +23,7 @@ make install
 cp -R include/cjieba/dict /etc/jieba
 ```
 ## 用法
-
+```
 $j=new jieba();
 $rs = $j->cut('他来到了网易杭研大厦', true);
 print_r($rs);
@@ -37,7 +37,7 @@ $rs = $j->extract_tags('我是拖拉机学院手扶拖拉机专业的。不用�
 print_r($rs);
 $rs = $j->cut_tagging('我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。');
 print_r($rs);
-
+```
 
 ## 鸣谢
 
