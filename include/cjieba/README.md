@@ -44,3 +44,6 @@ print_r($rs);
 [Jieba中文分词]
 [CppJieba]
 
+[Jieba中文分词]:https://github.com/fxsjy/jieba
+[CppJieba]:https://github.com/yanyiwu/cppjieba.git
+
